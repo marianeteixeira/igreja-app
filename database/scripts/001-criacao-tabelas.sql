@@ -15,7 +15,8 @@ CREATE TABLE Pessoa(
     IsAtiva         BIT NOT NULL CONSTRAINT DF_Pessoa_IsAtiva DEFAULT (1),
     Telefone        NVARCHAR(20) NULL,
     OrganizacaoId   INT NULL,
-    CONSTRAINT FK_Pessoa_Organizacao  FOREIGN  KEY (OrganizacaoId) REFERENCES Organizacao(OrganizacaoId)
+    CONSTRAINT FK_Pessoa_Organizacao  FOREIGN  KEY (OrganizacaoId) REFERENCES Organizacao(OrganizacaoId),
+    CONSTRAINT CK_Pessoa_Organizacao  CHECK (IsIngressada = 0 OR OrganizacaoId IS NOT NULL)
 );
 
 CREATE TABLE Atividade(
@@ -31,4 +32,15 @@ CREATE TABLE AtividadeOrganizadora(
     CONSTRAINT PK_AtividadeOrganizadora              PRIMARY  KEY (AtividadeId, OrganizacaoId),
     CONSTRAINT FK_AtividadeOrganizadora_Atividade    FOREIGN  KEY (AtividadeId) REFERENCES Atividade(AtividadeId),
     CONSTRAINT FK_AtividadeOrganizadora_Organizacao  FOREIGN  KEY (OrganizacaoId) REFERENCES Organizacao(OrganizacaoId)
+);
+
+CREATE TABLE Presenca
+(
+	PessoaId	INT NOT NULL,
+	AtividadeId INT NOT NULL,
+	Observacao	NVARCHAR(500) NULL,
+
+	CONSTRAINT PK_Presenca				PRIMARY KEY (PessoaId, AtividadeId),
+	CONSTRAINT FK_Presenca_Pessoa		FOREIGN KEY (PessoaId)		REFERENCES Pessoa(PessoaId),
+	CONSTRAINT FK_Presenca_Atividade	FOREIGN KEY (AtividadeId)	REFERENCES Atividade(AtividadeId)
 );

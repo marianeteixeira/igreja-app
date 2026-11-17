@@ -19,15 +19,35 @@ INSERT INTO AtividadeOrganizadora (AtividadeId, OrganizacaoId)
 VALUES (1, 1), -- Encontro Regional / PL Aurora
        (1, 2); -- Encontro Regional / PL Horizonte
 
+INSERT INTO Presenca (PessoaId, AtividadeId) 
+VALUES (1, 1);
+
 
 -- TESTES NEGATIVOS: COMANDOS COMENTADOS INTENCIONALMENTE
 
--- Teste 1: violação de chave estrangeira (erro 547)
+-- Teste 1: FK_Pessoa_Organizacao - violação de chave estrangeira (erro 547)
 -- Organização 999 não existe.
 -- INSERT INTO Pessoa (Nome, IsIngressada, OrganizacaoId)
 -- VALUES ('Pedro Almeida', 1, 999);
 
--- Teste 2: violação de chave primária composta (erro 2627)
+-- Teste 2: PK_AtividadeOrganizadora - violação de chave primária composta (erro 2627)
 -- A combinação (1, 1) já existe.
 -- INSERT INTO AtividadeOrganizadora (AtividadeId, OrganizacaoId)
 -- VALUES (1, 1);
+
+-- Teste 3: CK_Pessoa_Organizacao - violação de CHECK (erro 547)
+-- CK_Pessoa_Organizacao: pessoa ingressada exige organização.
+--INSERT INTO Pessoa (Nome, IsIngressada,	OrganizacaoId) 
+--VALUES ('Daniela Teste', 1, NULL);
+
+-- Teste 4: FK_Presenca_Pessoa -  violação de chave estrangeira (erro 547)
+--INSERT INTO Presenca (PessoaId, AtividadeId) 
+--VALUES (999, 1);
+
+-- Teste 5: FK_Presenca_Atividade - violaçãode de chave estrangeira (erro 547)
+--INSERT INTO Presenca (PessoaId, AtividadeId) 
+--VALUES (1, 999);
+
+-- Teste 6: PK_Presenca - violação de chave primária composta (erro 2627)
+--INSERT INTO Presenca (PessoaId, AtividadeId) 
+--VALUES (1, 1);
